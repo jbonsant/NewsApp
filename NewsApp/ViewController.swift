@@ -11,9 +11,23 @@ class ViewController: UIViewController {
     
     var newsProvider: NewsProvider!
     var newsArticles: [NewsArticle] = []
+    
+    lazy var carouselView: CarouselView = {
+        var view = CarouselView()
+        return view
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+   
+        view.addSubview(carouselView)
+        
+        NSLayoutConstraint.activate([
+            carouselView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            carouselView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            carouselView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
+            carouselView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.6)
+        ])
         
         fetchNews()
     }
@@ -34,6 +48,7 @@ class ViewController: UIViewController {
             case .success(let articles):
                 print("\(articles.count) articles found")
                 self.newsArticles = articles
+                self.carouselView.updateContent(articles: articles)
             case .failure(let error):
                 print("News fetch failed. error = '\(error.localizedDescription)'")
             }

@@ -17,6 +17,11 @@
 		1ED0F22324F979BA0067358D /* NewsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED0F22224F979BA0067358D /* NewsAPI.swift */; };
 		1ED0F22524F9857A0067358D /* good_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 1ED0F22424F9857A0067358D /* good_response.json */; };
 		1ED0F22724F985D50067358D /* empty_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 1ED0F22624F985D50067358D /* empty_response.json */; };
+		1ED0F22B24F989220067358D /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED0F22A24F989220067358D /* View.swift */; };
+		1ED0F22D24F989590067358D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED0F22C24F989590067358D /* Extensions.swift */; };
+		1ED0F22F24F989930067358D /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED0F22E24F989930067358D /* CarouselView.swift */; };
+		1ED0F23124F989AB0067358D /* CarouselLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED0F23024F989AB0067358D /* CarouselLayout.swift */; };
+		1ED0F23324F989BE0067358D /* CarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED0F23224F989BE0067358D /* CarouselCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +49,11 @@
 		1ED0F22224F979BA0067358D /* NewsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAPI.swift; sourceTree = "<group>"; };
 		1ED0F22424F9857A0067358D /* good_response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = good_response.json; sourceTree = "<group>"; };
 		1ED0F22624F985D50067358D /* empty_response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = empty_response.json; sourceTree = "<group>"; };
+		1ED0F22A24F989220067358D /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		1ED0F22C24F989590067358D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		1ED0F22E24F989930067358D /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
+		1ED0F23024F989AB0067358D /* CarouselLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselLayout.swift; sourceTree = "<group>"; };
+		1ED0F23224F989BE0067358D /* CarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,11 +95,13 @@
 		1ED0F1EC24F975CE0067358D /* NewsApp */ = {
 			isa = PBXGroup;
 			children = (
+				1ED0F22924F9890E0067358D /* Utils */,
 				1ED0F1ED24F975CE0067358D /* AppDelegate.swift */,
 				1ED0F1EF24F975CE0067358D /* SceneDelegate.swift */,
 				1ED0F1F124F975CE0067358D /* ViewController.swift */,
 				1ED0F1F624F975CF0067358D /* Assets.xcassets */,
 				1ED0F1FB24F975CF0067358D /* Info.plist */,
+				1ED0F22824F988F30067358D /* CarouselView */,
 				1ED0F21D24F9783D0067358D /* NewsProvider */,
 			);
 			path = NewsApp;
@@ -114,6 +126,25 @@
 				1ED0F21E24F978980067358D /* Models.swift */,
 			);
 			path = NewsProvider;
+			sourceTree = "<group>";
+		};
+		1ED0F22824F988F30067358D /* CarouselView */ = {
+			isa = PBXGroup;
+			children = (
+				1ED0F22E24F989930067358D /* CarouselView.swift */,
+				1ED0F23024F989AB0067358D /* CarouselLayout.swift */,
+				1ED0F23224F989BE0067358D /* CarouselCell.swift */,
+			);
+			path = CarouselView;
+			sourceTree = "<group>";
+		};
+		1ED0F22924F9890E0067358D /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				1ED0F22A24F989220067358D /* View.swift */,
+				1ED0F22C24F989590067358D /* Extensions.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -218,9 +249,14 @@
 			files = (
 				1ED0F22124F979AA0067358D /* NewsProvider.swift in Sources */,
 				1ED0F1F224F975CE0067358D /* ViewController.swift in Sources */,
+				1ED0F23324F989BE0067358D /* CarouselCell.swift in Sources */,
 				1ED0F1EE24F975CE0067358D /* AppDelegate.swift in Sources */,
+				1ED0F22D24F989590067358D /* Extensions.swift in Sources */,
+				1ED0F22F24F989930067358D /* CarouselView.swift in Sources */,
+				1ED0F23124F989AB0067358D /* CarouselLayout.swift in Sources */,
 				1ED0F1F024F975CE0067358D /* SceneDelegate.swift in Sources */,
 				1ED0F21F24F978980067358D /* Models.swift in Sources */,
+				1ED0F22B24F989220067358D /* View.swift in Sources */,
 				1ED0F22324F979BA0067358D /* NewsAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
