@@ -10,7 +10,7 @@ import UIKit
 class CarouselView: View, UICollectionViewDataSource {
     
     private var articles: [NewsArticle] = []
-    private var images: [UIImage] = []
+    private var images: [UIImage?] = []
     
     lazy var collectionView: UICollectionView = {
         let layout = CarouselLayout()
@@ -39,7 +39,9 @@ class CarouselView: View, UICollectionViewDataSource {
     
     func updateContent(articles: [NewsArticle]) {
         self.articles = articles
-        self.images = articles.map { _ in UIImage() }
+        
+        self.images = Array<UIImage?>(repeating: nil, count: articles.count)
+        
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadData()
         }
@@ -51,7 +53,24 @@ class CarouselView: View, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CarouselCell.reusableIndentifer, for: indexPath) as! CarouselCell
+            
+        if let image = images[indexPath.row] {
+            cell.imageView.image = image // Take cached image
+        } else if let imageUrl = URL(string: articles[indexPath.row].urlToImage ?? "") {
+            UIImage.download(url: imageUrl) { [weak self] (image) in // Download image
+                self?.images[indexPath.row] = image
+                if let image = image {
+                    DispatchQueue.main.async {
+                        cell.imageView.image = image
+                    }
+                }
+            }
+        } else {
+            cell.imageView.image = nil
+        }
+        
         return cell
     }
     
