@@ -33,7 +33,7 @@ class CarouselView: View, UICollectionViewDataSource, CarouselLayoutDelegate {
     
     override func postInit() {
         super.postInit()
-        backgroundColor = .red
+
         addSubview(collectionView)
 
         NSLayoutConstraint.activate([
