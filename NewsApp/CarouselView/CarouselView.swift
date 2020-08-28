@@ -27,6 +27,7 @@ class CarouselView: View, UICollectionViewDataSource, CarouselLayoutDelegate {
         collectionView.dataSource = self
         collectionView.clipsToBounds = false
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.decelerationRate = .fast
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()

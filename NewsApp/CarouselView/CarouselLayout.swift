@@ -68,7 +68,15 @@ class CarouselLayout: UICollectionViewLayout {
     
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
         
-        let nextFocusedItemIndex = indexForOffset(proposedContentOffset.x)
+        var nextFocusedItemIndex = indexForOffset(proposedContentOffset.x)
+        
+        if nextFocusedItemIndex == focusedItemIndex { // Prevent instant "snap back" when there is residual scrolling velocity
+            if velocity.x < 0 && nextFocusedItemIndex != 0 {
+                nextFocusedItemIndex -= 1
+            } else if velocity.x > 0 && nextFocusedItemIndex != itemsAttributes.count - 1 {
+                nextFocusedItemIndex += 1
+            }
+        }
         
         if focusedItemIndex != nextFocusedItemIndex {
             focusedItemIndex = nextFocusedItemIndex
