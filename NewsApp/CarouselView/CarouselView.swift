@@ -11,7 +11,7 @@ protocol CarouselViewDelegate: AnyObject {
     func carouselViewFocusedItemWillChangeTo(index: Int)
 }
 
-class CarouselView: View, UICollectionViewDataSource, CarouselLayoutDelegate {
+class CarouselView: View, UICollectionViewDelegate, UICollectionViewDataSource, CarouselLayoutDelegate {
     
     weak var delegate: CarouselViewDelegate?
     
@@ -22,6 +22,7 @@ class CarouselView: View, UICollectionViewDataSource, CarouselLayoutDelegate {
         let layout = CarouselLayout()
         layout.delegate = self
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.delegate = self
         collectionView.backgroundColor = .clear
         collectionView.register(CarouselCell.self, forCellWithReuseIdentifier: CarouselCell.reusableIndentifer)
         collectionView.dataSource = self
@@ -65,21 +66,35 @@ class CarouselView: View, UICollectionViewDataSource, CarouselLayoutDelegate {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CarouselCell.reusableIndentifer, for: indexPath) as! CarouselCell
             
         if let image = images[indexPath.row] {
-            cell.imageView.image = image // Take cached image
-        } else if let imageUrl = URL(string: articles[indexPath.row].urlToImage ?? "") {
-            UIImage.download(url: imageUrl) { [weak self] (image) in // Download image
-                self?.images[indexPath.row] = image
-                if let image = image {
-                    DispatchQueue.main.async {
-                        cell.imageView.image = image
-                    }
-                }
+            DispatchQueue.main.async {
+                cell.imageView.image = image
             }
         } else {
             cell.imageView.image = nil
         }
         
         return cell
+    }
+    
+    //MARK: UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        guard let imageUrl = URL(string: articles[indexPath.row].urlToImage ?? "") else {
+            return
+        }
+        guard images[indexPath.row] == nil else {
+            return // already downloaded
+        }
+     
+        UIImage.download(url: imageUrl) { [weak self] (image) in
+            self?.images[indexPath.row] = image
+            guard let image = image else { return }
+            DispatchQueue.main.async {
+                if let cell = collectionView.cellForItem(at: indexPath) as? CarouselCell {
+                    cell.imageView.image = image // Set image if cell is already displayed
+                }
+            }
+        }
     }
     
     //MARK: CarouselLayoutDelegate
