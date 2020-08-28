@@ -7,13 +7,20 @@
 
 import UIKit
 
-class CarouselView: View, UICollectionViewDataSource {
+protocol CarouselViewDelegate: AnyObject {
+    func carouselViewFocusedItemWillChangeTo(index: Int)
+}
+
+class CarouselView: View, UICollectionViewDataSource, CarouselLayoutDelegate {
+    
+    weak var delegate: CarouselViewDelegate?
     
     private var articles: [NewsArticle] = []
     private var images: [UIImage?] = []
     
     lazy var collectionView: UICollectionView = {
         let layout = CarouselLayout()
+        layout.delegate = self
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.register(CarouselCell.self, forCellWithReuseIdentifier: CarouselCell.reusableIndentifer)
@@ -74,4 +81,8 @@ class CarouselView: View, UICollectionViewDataSource {
         return cell
     }
     
+    //MARK: CarouselLayoutDelegate
+    func carouselLayoutFocusedItemWillChangeTo(index: Int) {
+        delegate?.carouselViewFocusedItemWillChangeTo(index: index)
+    }
 }

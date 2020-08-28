@@ -7,13 +7,20 @@
 
 import UIKit
 
+protocol CarouselLayoutDelegate: AnyObject {
+    func carouselLayoutFocusedItemWillChangeTo(index: Int)
+}
 
 class CarouselLayout: UICollectionViewLayout {
 
+    weak var delegate: CarouselLayoutDelegate?
+    
     private var itemsAttributes: [UICollectionViewLayoutAttributes] = []
     private var itemSize: CGSize!
     private var spacing: CGFloat!
     private var edgeOffsetX: CGFloat = 15
+    private var focusedItemTargetCenterX: CGFloat!
+    
     private var focusedItemIndex: Int = 0
     
     override func prepare() {
@@ -23,6 +30,7 @@ class CarouselLayout: UICollectionViewLayout {
         
         itemSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
         spacing = itemSize.width * 0.14
+        focusedItemTargetCenterX = (itemSize.width / 2) + edgeOffsetX
         
         collectionView.contentInset.left = (collectionView.bounds.size.width - itemSize.width) / 2
         collectionView.contentInset.right = (collectionView.bounds.size.width - itemSize.width) / 2
@@ -56,5 +64,27 @@ class CarouselLayout: UICollectionViewLayout {
     
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true // to recalculate at every scroll
+    }
+    
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+        
+        let nextFocusedItemIndex = indexForOffset(proposedContentOffset.x)
+        
+        if focusedItemIndex != nextFocusedItemIndex {
+            focusedItemIndex = nextFocusedItemIndex
+            delegate?.carouselLayoutFocusedItemWillChangeTo(index: nextFocusedItemIndex)
+        }
+  
+        return offsetForItemAtIndex(nextFocusedItemIndex)
+    }
+    
+    private func indexForOffset(_ xOffset: CGFloat) -> Int {
+        let itemSpace = itemSize.width + spacing
+        return Int(round(xOffset / itemSpace) + 1)
+    }
+    
+    private func offsetForItemAtIndex(_ index: Int) -> CGPoint {
+        let xOffset = itemsAttributes[index].center.x - focusedItemTargetCenterX
+        return CGPoint(x: xOffset, y: 0)
     }
 }

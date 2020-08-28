@@ -7,13 +7,14 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CarouselViewDelegate {
     
     var newsProvider: NewsProvider!
     var newsArticles: [NewsArticle] = []
     
     lazy var carouselView: CarouselView = {
         var view = CarouselView()
+        view.delegate = self
         return view
     }()
 
@@ -54,7 +55,12 @@ class ViewController: UIViewController {
             }
         }
     }
-
-
+    
+    //MARK: CarouselViewDelegate
+    func carouselViewFocusedItemWillChangeTo(index: Int) {
+        guard !newsArticles.isEmpty else { return }
+        let article = newsArticles[index]
+        print(article.title ?? "nil")
+    }
 }
 
