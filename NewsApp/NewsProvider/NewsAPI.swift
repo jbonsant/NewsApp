@@ -11,8 +11,14 @@ class NewsAPI: NewsProvider {
     
     private let Url = "http://newsapi.org/v2/everything"
     private let TopicParam = "bitcoin"
-    private let FromParam = "2020-08-28"
     private let SortByParam = "publishedAt"
+    
+    private var fromParam: String = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+        return formatter.string(from: yesterday)
+    }()
     
     private let session = URLSession(configuration: .default, delegate: nil, delegateQueue: nil)
     private var apiKey: String
@@ -27,7 +33,7 @@ class NewsAPI: NewsProvider {
        
         url = url.appendingQueryParameters([
             "q":        TopicParam,
-            "from":     FromParam,
+            "from":     fromParam,
             "sortBy":   SortByParam,
             "apiKey":   apiKey,
         ])
