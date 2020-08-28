@@ -23,4 +23,13 @@ extension UIImage {
     }
 }
 
-
+extension UILabel {
+    func animateTextChangeTo(_ newText: String, duration: TimeInterval, options: UIView.AnimationOptions = []) {
+        UIView.transition(with: self,
+                          duration: duration,
+                          options: options,
+                          animations: { [weak self] in
+                            self?.text = newText
+        }, completion: nil)
+    }
+}

@@ -9,6 +9,7 @@ import UIKit
 
 extension UIColor {
     static let header = UIColor.white
+    static let sourceLabel = UIColor.white
     static let newsLabel = UIColor(red: 0.997, green: 0.575, blue: 0.003, alpha: 1.00)
 }
 
@@ -29,8 +30,14 @@ class ViewController: UIViewController, CarouselViewDelegate {
     lazy var sourceLabel: UILabel = {
         var label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        label.textColor = .newsLabel
+        label.textColor = .sourceLabel
         label.lineBreakMode = .byTruncatingTail
+        label.layer.shadowOffset = CGSize(width: 0.5, height: 1)
+        label.layer.shadowRadius = 2
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOpacity = 0.6
+        label.layer.shouldRasterize = true
+        label.layer.rasterizationScale = UIScreen.main.scale
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -86,10 +93,10 @@ class ViewController: UIViewController, CarouselViewDelegate {
             titleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 18),
             titleLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -18),
             
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: -1),
             descriptionLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 18),
             descriptionLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -18),
-            descriptionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -18)
+            descriptionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -8)
         ])
         
         fetchNews()
@@ -120,15 +127,21 @@ class ViewController: UIViewController, CarouselViewDelegate {
     }
     
     //MARK: CarouselViewDelegate
+    
     func carouselViewFocusedItemWillChangeTo(index: Int) {
+        
         guard !newsArticles.isEmpty else { return }
         let article = newsArticles[index]
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.sourceLabel.text = article.source?.name ?? ""
-            self.titleLabel.text = article.title ?? ""
-            self.descriptionLabel.text = article.description ?? ""
+            self.sourceLabel.text =  article.source?.name ?? ""
+            self.titleLabel.animateTextChangeTo(article.title ?? "",
+                                                duration: 0.5,
+                                                options: .transitionCrossDissolve)
+            self.descriptionLabel.animateTextChangeTo(article.description ?? "",
+                                                      duration: 0.5,
+                                                      options: .transitionCrossDissolve)
         }
     }
 }

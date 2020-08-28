@@ -34,7 +34,7 @@ class CarouselLayout: UICollectionViewLayout {
         
         collectionView.contentInset.left = (collectionView.bounds.size.width - itemSize.width) / 2
         collectionView.contentInset.right = (collectionView.bounds.size.width - itemSize.width) / 2
-        
+
         resetAttributes()
     }
     

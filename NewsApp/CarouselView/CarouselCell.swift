@@ -28,7 +28,8 @@ class CarouselCell: UICollectionViewCell {
     internal func internalPostInit() {
         
         contentView.backgroundColor = .gray
-        contentView.layer.cornerRadius = 4
+        contentView.layer.cornerRadius = 14
+        contentView.layer.cornerCurve = .continuous
         contentView.layer.masksToBounds = true
         
         contentView.addSubview(imageView)
