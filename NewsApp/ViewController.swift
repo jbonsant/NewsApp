@@ -10,6 +10,7 @@ import UIKit
 class ViewController: UIViewController {
     
     var newsProvider: NewsProvider!
+    var newsArticles: [NewsArticle] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,7 @@ class ViewController: UIViewController {
             switch result {
             case .success(let articles):
                 print("\(articles.count) articles found")
+                self.newsArticles = articles
             case .failure(let error):
                 print("News fetch failed. error = '\(error.localizedDescription)'")
             }

@@ -9,25 +9,58 @@ import XCTest
 @testable import NewsApp
 
 class NewsAppTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    class FakeNewsAPI: NewsProvider {
+        
+        let resource: String!
+        
+        init(resource: String) {
+            self.resource = resource
+        }
+        
+        func requestNews(completionHandler: @escaping (Result<[NewsArticle], NewsProviderError>) -> Void) {
+            let path = Bundle(for: type(of: self)).path(forResource: resource, ofType: "json")!
+            let json = try! String(contentsOfFile: path, encoding: .utf8)
+            let data = json.data(using: .utf8)!
+            do {
+                let response = try JSONDecoder().decode(ApiResponse.self, from: data)
+                completionHandler(.success(response.articles))
+            } catch {
+                completionHandler(.failure(.jsonParsingFailed(error)))
+            }
         }
     }
-
+    
+    func testNewsParsing() throws {
+        FakeNewsAPI(resource: "good_response").requestNews { result in
+            switch result {
+            case .success(let articles):
+                XCTAssertEqual(articles.count, 20)
+            case .failure(let error):
+                XCTFail("Request should not failed. error = \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func testNewsParsingOfEmptyResponse() throws {
+        FakeNewsAPI(resource: "empty_response").requestNews { result in
+            switch result {
+            case .success(_):
+                XCTFail("Request should failed")
+            case .failure(let error):
+                switch error {
+                case  .jsonParsingFailed(_):
+                    break
+                default:
+                    XCTFail("Only JSON parsing should be failing. error = '\(error)'")
+                }
+            }
+        }
+    }
+    
+    func testViewControllerNewsFetch() throws {
+        let viewController = ViewController(newsProvider: FakeNewsAPI(resource: "good_response"))
+        viewController.fetchNews()
+        XCTAssertEqual(viewController.newsArticles.count, 20)
+    }
 }
